@@ -53,51 +53,7 @@ const char *server_introspection_xml =
 
 	"</node>\n";
 
-/*
-void reply_to_method_call(DBusMessage* msg, DBusConnection* conn)
-{
-   DBusMessage* reply;
-   DBusMessageIter args;
-   DBusConnection* conn;
-   bool stat = true;
-   dbus_uint32_t level = 21614;
-   dbus_uint32_t serial = 0;
-   char* param = "";
 
-   // read the arguments
-   if (!dbus_message_iter_init(msg, &args))
-      fprintf(stderr, "Message has no arguments!\n"); 
-   else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
-      fprintf(stderr, "Argument is not string!\n"); 
-   else 
-      dbus_message_iter_get_basic(&args, &param);
-   printf("Method called with %s\n", param);
-
-   // create a reply from the message
-   reply = dbus_message_new_method_return(msg);
-
-   // add the arguments to the reply
-   dbus_message_iter_init_append(reply, &args);
-   if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &stat)) { 
-      fprintf(stderr, "Out Of Memory!\n"); 
-      exit(1);
-   }
-   if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_UINT32, &level)) { 
-      fprintf(stderr, "Out Of Memory!\n"); 
-      exit(1);
-   }
-
-   // send the reply && flush the connection
-   if (!dbus_connection_send(conn, reply, &serial)) { 
-      fprintf(stderr, "Out Of Memory!\n"); 
-      exit(1);
-   }
-   dbus_connection_flush(conn);
-
-   // free the reply
-   dbus_message_unref(reply);
-}
-*/
 DBusHandlerResult server_get_properties_handler(const char *property, DBusConnection *conn, DBusMessage *reply)
 {
 	if (!strcmp(property, "Version")) {
@@ -339,26 +295,37 @@ int main(int argc, char const *argv[])
 	/* Start the glib event loop */
 	g_main_loop_run(mainloop);
 	return EXIT_SUCCESS;
-/*
-	while (true) {
-	// non blocking read of the next available message
-		dbus_connection_read_write(conn, 0);
-		msg = dbus_connection_pop_message(conn);
-		// loop again if we haven't got a message
-		if (NULL == msg) { 
-			sleep(1); 
-			continue; 
-		}
-		// check this is a method call for the right interface and method
-		if (dbus_message_is_method_call(msg, "test.method.Type", "Method"))
-			reply_to_method_call(msg, conn);
-			// free the message
-		dbus_message_unref(msg);
-	}
 
-
-	sleep(100);
-	dbus_connection_close(conn);
-	return 0;
-*/
 }
+
+/*
+
+dbus-send examples
+
+dbus-send
+			--session
+			--dest=org.example.TestServer
+			--type=method_call
+			--print-reply
+			/org/example/TestObject
+			org.example.TestInterface.Echo string:"lol"
+
+
+dbus-send
+			--session
+			--dest=org.example.TestServer
+			--type=method_call
+			--print-reply
+			/org/example/TestObject
+			org.example.TestInterface.Ping
+
+
+dbus-send
+		--session
+		--dest=org.example.TestServer
+		--type=method_call
+		--print-reply
+		/org/example/TestObject
+		org.example.TestInterface.EmitSignal
+
+*/
