@@ -7,6 +7,7 @@ all: server client
 
 server: server.c
 	gcc $< -o $@ $(CFLAGS) $(CFLAGS_DBUS) $(CFLAGS_DBUS_GLIB)
+	cp ./org.example.TestServer.service /usr/share/dbus-1/services/
 
 client: client.c
 	gcc $< -o $@ $(CFLAGS) $(CFLAGS_DBUS) $(CFLAGS_DBUS_GLIB)
