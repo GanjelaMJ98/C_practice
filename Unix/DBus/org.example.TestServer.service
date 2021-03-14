@@ -1,4 +1,4 @@
-[D-Bus Service]
+[D-BUS Service]
 Name=org.example.TestServer
 Exec=/home/pavel/Git/my/C_practice/Unix/DBus/server
 User=pavel
